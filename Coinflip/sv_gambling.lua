@@ -4,7 +4,7 @@ util.AddNetworkString("BackToken")
 AddCSLuaFile("cl_gambling.lua")
 
 hook.Add("PlayerSay", "StartCommand", function(ply, text, ent)
-    if text == "!g" then
+    if text == "!coinflip" then
         net.Start("start")
         net.Send(ply)
     end
