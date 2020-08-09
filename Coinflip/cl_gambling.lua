@@ -1,4 +1,3 @@
-
 function MainUI()
     net.Receive("start", function(len, ply)
         frame = vgui.Create("DFrame")
@@ -30,6 +29,7 @@ function MainUI()
         local PanelCash1 = vgui.Create("DPanel", List1)
         PanelCash1:SetSize(108, 23)
         PanelCash1:SetPos(470, 5)
+
         --function CurrTokens()
         --[[
 
@@ -39,41 +39,32 @@ function MainUI()
             local TokensAdd = net.ReadUInt(8)
             print(TokensAdd .. "")
             ]]
-        local TokenInfo = vgui.Create("DLabel", PanelCash)
-        local TokensCurr = 1000 --+ TokensAdd --                 Dezeitige Tokens + Gekaufte Tokens (Notfinished)
-        TokenInfo:SetPos(473, -11)
-        TokenInfo:SetSize(150, 57)
-        TokenInfo:SetTextColor(Color(0, 0, 0))
-        TokenInfo:SetParent(List2)
-        TokenInfo:SetText("Deine Tokens: " .. TokensCurr)
-        local TokenInfo1 = vgui.Create("DLabel", PanelCash1)
-        TokenInfo1:SetPos(473, -11)
-        TokenInfo1:SetSize(150, 57)
-        TokenInfo1:SetTextColor(Color(0, 0, 0))
-        TokenInfo1:SetParent(List1)
-        TokenInfo1:SetText("Deine Tokens: " .. TokensCurr)
-        local Einsatz = vgui.Create("DLabel", List1)
-        Einsatz:SetText("Dein Einsatz: 100 Tokens")
-        Einsatz:SetPos(5, 90)
-        Einsatz:SetSize(150, 57)
-        Einsatz:SetTextColor(Color(0, 0, 0))
-
         --end)
         function CoinflipTab()
-            local ImageButtonKopf = vgui.Create("DImageButton", List1)
-            ImageButtonKopf:SetMaterial("vgui/kopf.png")
-            ImageButtonKopf:SizeToContents()
-            ImageButtonKopf:SetMouseInputEnabled(false)
-            ImageButtonKopf:CenterHorizontal(0.5)
-            ImageButtonKopf:SetPos(149, 0)
-            --[[
-            local ImageButtonZahl = vgui.Create("DImageButton", List1)
-            ImageButtonZahl:SetMaterial("vgui/kopf.png")
-            ImageButtonZahl:SizeToContents()
-            ImageButtonZahl:SetMouseInputEnabled(false)
-            ImageButtonZahl:CenterHorizontal(0.5)
-            ImageButtonZahl:SetPos(8, -26)
-            ]]
+            local TokenInfo = vgui.Create("DLabel", PanelCash) -- Für ExchangeTab
+            local TokensCurr = 1000 --+ TokensAdd --  Dezeitige Tokens + Gekaufte Tokens
+            TokenInfo:SetPos(473, -11)
+            TokenInfo:SetSize(150, 57)
+            TokenInfo:SetTextColor(Color(0, 0, 0))
+            TokenInfo:SetParent(List2)
+            TokenInfo:SetText("Deine Tokens: 1000 " )--.. TokensCurr
+            local TokenInfo1 = vgui.Create("DLabel", PanelCash1) --Coinflip Tab
+            TokenInfo1:SetPos(473, -11)
+            TokenInfo1:SetSize(150, 57)
+            TokenInfo1:SetTextColor(Color(0, 0, 0))
+            TokenInfo1:SetParent(List1)
+            TokenInfo1:SetText("Deine Tokens: 1000 ")
+            local Einsatz = vgui.Create("DLabel", List1)
+            Einsatz:SetText("Dein Einsatz: 100 Tokens")
+            Einsatz:SetPos(5, 90)
+            Einsatz:SetSize(150, 57)
+            Einsatz:SetTextColor(Color(0, 0, 0))
+            local ImageButton = vgui.Create("DImageButton", List1)
+            ImageButton:SetMaterial("vgui/kopf.png")
+            ImageButton:SizeToContents()
+            ImageButton:SetMouseInputEnabled(false)
+            ImageButton:CenterHorizontal(0.5)
+            ImageButton:SetPos(149, 0)
             local AuswahlBox = vgui.Create("DComboBox", List1)
             AuswahlBox:SetPos(5, 30)
             AuswahlBox:SetSize(100, 20)
@@ -83,12 +74,10 @@ function MainUI()
 
             AuswahlBox.OnSelect = function(self, index, value)
                 if value == "Kopf" then
-                    ImageButtonKopf:SetMaterial("vgui/kopf.png")
+                    ImageButton:SetMaterial("vgui/kopf.png")
                 else
-                    ImageButtonKopf:SetMaterial("vgui/zahl.png")
+                    ImageButton:SetMaterial("vgui/zahl.png")
                 end
-
-                print(value .. "aaaaaaaaaaaaa")
                 local FlipButton = vgui.Create("DButton", List1)
                 FlipButton:SetPos(137, 280)
                 FlipButton:SetSize(290, 50)
@@ -97,30 +86,34 @@ function MainUI()
 
                 FlipButton.DoClick = function()
                     local RandomNumber = math.random(1, 10)
+                    TokensCurr = TokensCurr - 100
                     print("Random Number: " .. RandomNumber)
 
-                    for i = 1, 5 do
-                        timer.Simple(0.1, function()
-                            ImageButtonKopf:SetMaterial("vgui/zahl.png")
-                        end)
+                    if value == "Kopf" and RandomNumber > 5 then
+                        chat.AddText("Du hast Gewonnen")
+                        ImageButton:SetMaterial("vgui/kopf.png")
+                        TokensCurr = TokensCurr + (100 * 2)
+                    elseif value == "Kopf" and RandomNumber < 5 then
+                        chat.AddText("Du hast leider Verloren")
+                        ImageButton:SetMaterial("vgui/zahl.png")
                     end
 
-                    if RandomNumber > 5 then
-                        if value == "Kopf" or value == "Zahl" then
-                            chat.AddText("GEWONNEN")
-                            TokensCurr = TokensCurr + 10
-                        else
-                            chat.AddText("Verloren")
-                        end
+                    if value == "Zahl" and RandomNumber > 5 then
+                        chat.AddText("Du hast Gewonnen")
+                        ImageButton:SetMaterial("vgui/zahl.png")
+                        TokensCurr = TokensCurr + (100 * 2)
+                    elseif value == "Zahl" and RandomNumber < 5 then
+                        chat.AddText("Du hast leider Verloren")
+                        ImageButton:SetMaterial("vgui/kopf.png")
                     end
+                    TokenInfo1:SetText("Deine Tokens: " .. TokensCurr)
+                    TokenInfo:SetText("Deine Tokens: " .. TokensCurr)
                 end
             end
-
-            -- end
             --CurrTokens()
             function ExchangeTab()
                 local NumberInput = vgui.Create("DTextEntry", List2)
-                NumberInput:SetPos(210, 25)
+                NumberInput:SetPos(220, 45)
                 NumberInput:SetSize(80, 26)
                 NumberInput:SetNumeric(true)
 
@@ -134,14 +127,14 @@ function MainUI()
                     end
                 end
 
-                local ButtonNumber = vgui.Create("DButton", List2)
-                ButtonNumber:SetPos(200, 50)
-                ButtonNumber:SetSize(120, 43)
-                --ButtonNumber:SetParent(NumberInput)
-                ButtonNumber:SetText("Umwandeln")
-                ButtonNumber:SetMouseInputEnabled(true)
+                local UmwandelButton = vgui.Create("DButton", List2)
+                UmwandelButton:SetPos(150, 110)
+                UmwandelButton:SetSize(220, 43)
+                --UmwandelButton:SetParent(NumberInput)
+                UmwandelButton:SetText("Umwandeln")
+                UmwandelButton:SetMouseInputEnabled(true)
 
-                ButtonNumber.DoClick = function()
+                UmwandelButton.DoClick = function()
                     --  chat.AddText(InputEndNumber .. "")
                     net.Start("Exchange")
                     net.WriteBool(false)
