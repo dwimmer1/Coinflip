@@ -30,16 +30,7 @@ function MainUI()
         PanelCash1:SetSize(108, 23)
         PanelCash1:SetPos(470, 5)
 
-        --function CurrTokens()
-        --[[
-
-
-        net.Receive("BackToken", function()
-            
-            local TokensAdd = net.ReadUInt(8)
-            print(TokensAdd .. "")
-            ]]
-        --end)
+  
         function CoinflipTab()
             local TokenInfo = vgui.Create("DLabel", PanelCash) -- Für ExchangeTab
             local TokensCurr = 1000 --+ TokensAdd --  Dezeitige Tokens + Gekaufte Tokens
