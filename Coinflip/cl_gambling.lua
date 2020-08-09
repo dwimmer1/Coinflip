@@ -1,12 +1,4 @@
---[[
 
-
-surface.CreateFont("MainFont", {
-    font = "Comic Sans MS",
-    size = 40,
-    weight = 500,
-})
-]]
 function MainUI()
     net.Receive("start", function(len, ply)
         frame = vgui.Create("DFrame")
@@ -48,7 +40,7 @@ function MainUI()
             print(TokensAdd .. "")
             ]]
         local TokenInfo = vgui.Create("DLabel", PanelCash)
-        local TokensCurr = 1000 --+ TokensAdd --                 Dezeitige Tokens + Gekaufte Tokens
+        local TokensCurr = 1000 --+ TokensAdd --                 Dezeitige Tokens + Gekaufte Tokens (Notfinished)
         TokenInfo:SetPos(473, -11)
         TokenInfo:SetSize(150, 57)
         TokenInfo:SetTextColor(Color(0, 0, 0))
