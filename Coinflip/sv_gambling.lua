@@ -22,8 +22,9 @@ function ExchangeInit()
                 DarkRP.notify(ply, 1, 4, string.format("Das kannst du dir nicht leisten."))
             else
                 ply:addMoney(-InputEndNumberInit)
+                local TokenBoughtValue = InputEndNumberInit
                 net.Start("BackToken")
-                net.WriteUInt(InputEndNumberInit, 8)
+                net.WriteUInt(TokenBoughtValue, 8)
                 net.Send(ply)
             end
         end
