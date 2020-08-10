@@ -61,14 +61,14 @@ function MainUI()
             AuswahlBox:SetValue("Auswahl")
             AuswahlBox:AddChoice("Kopf")
             AuswahlBox:AddChoice("Zahl")
-            local IKopf = ImageButton:SetMaterial("vgui/kopf.png")
-            local IZahl = ImageButton:SetMaterial("vgui/zahl.png")
+            local IKopf = "vgui/kopf.png"
+            local IZahl = "vgui/zahl.png"
 
             AuswahlBox.OnSelect = function(self, index, value)
                 if value == "Kopf" then
-                    ImageButton:SetMaterial("vgui/kopf.png")
+                    ImageButton:SetMaterial(IKopf)
                 else
-                    ImageButton:SetMaterial("vgui/zahl.png")
+                    ImageButton:SetMaterial(IZahl)
                 end
 
                 local FlipButton = vgui.Create("DButton", List1)
@@ -84,20 +84,20 @@ function MainUI()
 
                     if value == "Kopf" and RandomNumber > 5 then
                         chat.AddText("Du hast Gewonnen")
-                        ImageButton:SetMaterial("vgui/kopf.png")
+                        ImageButton:SetMaterial(IKopf)
                         TokensCurr = TokensCurr + (100 * 2)
                     elseif value == "Kopf" and RandomNumber < 5 then
                         chat.AddText("Du hast leider Verloren")
-                        ImageButton:SetMaterial("vgui/zahl.png")
+                        ImageButton:SetMaterial(IZahl)
                     end
 
                     if value == "Zahl" and RandomNumber > 5 then
                         chat.AddText("Du hast Gewonnen")
-                        ImageButton:SetMaterial("vgui/zahl.png")
+                        ImageButton:SetMaterial(IZahl)
                         TokensCurr = TokensCurr + (100 * 2)
                     elseif value == "Zahl" and RandomNumber < 5 then
                         chat.AddText("Du hast leider Verloren")
-                        ImageButton:SetMaterial("vgui/kopf.png")
+                        ImageButton:SetMaterial(IKopf)
                     end
 
                     TokenInfo1:SetText("Deine Tokens: " .. TokensCurr)
