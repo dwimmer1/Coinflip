@@ -1,3 +1,5 @@
+print("Joooooooooooooooooooooooooooooooooooooooooooooooooo")
+
 function MainUI()
     net.Receive("start", function(len, ply)
         frame = vgui.Create("DFrame")
@@ -5,7 +7,6 @@ function MainUI()
         frame:Center()
         frame:SetVisible(true)
         frame:MakePopup()
-        --frame:ShowCloseButton(false)
         frame:SetTitle("Coinflip")
 
         frame.Paint = function(s, w, h)
@@ -21,8 +22,8 @@ function MainUI()
         local List2 = vgui.Create("DPanelList")
         List2:SetSize(475, 355)
         List2:SetPos(5, 15)
-        MainSheet:AddSheet("Coinflip", List1, "icon16/heart.png", false, false, "Flip it")
-        MainSheet:AddSheet("Exchange", List2, "icon16/shield.png", false, false, "??")
+        MainSheet:AddSheet("Coinflip", List1, "icon16/coins.png", false, false, "Flip it")
+        MainSheet:AddSheet("Exchange", List2, "icon16/money.png", false, false, "Exchange")
         local PanelCash = vgui.Create("DPanel", List2)
         PanelCash:SetSize(108, 23)
         PanelCash:SetPos(470, 5)
@@ -30,7 +31,6 @@ function MainUI()
         PanelCash1:SetSize(108, 23)
         PanelCash1:SetPos(470, 5)
 
-  
         function CoinflipTab()
             local TokenInfo = vgui.Create("DLabel", PanelCash) -- Für ExchangeTab
             local TokensCurr = 1000 --+ TokensAdd --  Dezeitige Tokens + Gekaufte Tokens
@@ -38,13 +38,13 @@ function MainUI()
             TokenInfo:SetSize(150, 57)
             TokenInfo:SetTextColor(Color(0, 0, 0))
             TokenInfo:SetParent(List2)
-            TokenInfo:SetText("Deine Tokens: 1000 " )--.. TokensCurr
+            TokenInfo:SetText("Deine Tokens: " .. TokensCurr) --
             local TokenInfo1 = vgui.Create("DLabel", PanelCash1) --Coinflip Tab
             TokenInfo1:SetPos(473, -11)
             TokenInfo1:SetSize(150, 57)
             TokenInfo1:SetTextColor(Color(0, 0, 0))
             TokenInfo1:SetParent(List1)
-            TokenInfo1:SetText("Deine Tokens: 1000 ")
+            TokenInfo1:SetText("Deine Tokens: " .. TokensCurr)
             local Einsatz = vgui.Create("DLabel", List1)
             Einsatz:SetText("Dein Einsatz: 100 Tokens")
             Einsatz:SetPos(5, 90)
@@ -55,13 +55,15 @@ function MainUI()
             ImageButton:SizeToContents()
             ImageButton:SetMouseInputEnabled(false)
             ImageButton:CenterHorizontal(0.5)
-            ImageButton:SetPos(149, 0)
+            ImageButton:SetPos(155, 0)
             local AuswahlBox = vgui.Create("DComboBox", List1)
             AuswahlBox:SetPos(5, 30)
             AuswahlBox:SetSize(100, 20)
             AuswahlBox:SetValue("Auswahl")
             AuswahlBox:AddChoice("Kopf")
             AuswahlBox:AddChoice("Zahl")
+            local IKopf = ImageButton:SetMaterial("vgui/kopf.png")
+            local IZahl = ImageButton:SetMaterial("vgui/zahl.png")
 
             AuswahlBox.OnSelect = function(self, index, value)
                 if value == "Kopf" then
@@ -69,8 +71,9 @@ function MainUI()
                 else
                     ImageButton:SetMaterial("vgui/zahl.png")
                 end
+
                 local FlipButton = vgui.Create("DButton", List1)
-                FlipButton:SetPos(137, 280)
+                FlipButton:SetPos(140, 280)
                 FlipButton:SetSize(290, 50)
                 FlipButton:SetText("FLIP IT")
                 FlipButton:SetMouseInputEnabled(true)
@@ -97,31 +100,30 @@ function MainUI()
                         chat.AddText("Du hast leider Verloren")
                         ImageButton:SetMaterial("vgui/kopf.png")
                     end
+
                     TokenInfo1:SetText("Deine Tokens: " .. TokensCurr)
                     TokenInfo:SetText("Deine Tokens: " .. TokensCurr)
                 end
             end
-            --CurrTokens()
-            function ExchangeTab()
-                local NumberInput = vgui.Create("DTextEntry", List2)
-                NumberInput:SetPos(220, 45)
-                NumberInput:SetSize(80, 26)
-                NumberInput:SetNumeric(true)
 
-                --  NumberInput:SetValue( "Only Numbers" )
-                while NumberInput:IsEditing() == true do
-                    NumberInput.OnChange = function(self)
-                        local InputEndNumber = NumberInput:GetInt() -- InputEndNumber = Nummer die in die Box eingegeben wurde (Enter)
-                        net.Start("Exchange")
-                        net.WriteUInt(InputEndNumber, 8)
-                        net.SendToServer()
-                    end
+            function ExchangeTab()
+                local NummerInputBox = vgui.Create("DTextEntry", List2)
+                NummerInputBox:SetPos(220, 45)
+                NummerInputBox:SetSize(80, 26)
+                NummerInputBox:SetNumeric(true)
+                NummerInputBox:SetValue("Only Numbers")
+
+                -- while NummerInputBox:IsEditing() == true do
+                NummerInputBox.OnValueChange = function(self)
+                    local InputEndNumber = NummerInputBox:GetInt() -- InputEndNumber = Nummer die in die Box eingegeben wurde (Enter)
+                    net.Start("Exchange")
+                    net.WriteUInt(InputEndNumber, 8)
+                    net.SendToServer()
                 end
 
                 local UmwandelButton = vgui.Create("DButton", List2)
                 UmwandelButton:SetPos(150, 110)
                 UmwandelButton:SetSize(220, 43)
-                --UmwandelButton:SetParent(NumberInput)
                 UmwandelButton:SetText("Umwandeln")
                 UmwandelButton:SetMouseInputEnabled(true)
 

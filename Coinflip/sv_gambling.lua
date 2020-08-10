@@ -4,7 +4,7 @@ util.AddNetworkString("BackToken")
 AddCSLuaFile("cl_gambling.lua")
 
 hook.Add("PlayerSay", "StartCommand", function(ply, text, ent)
-    if text == "!coinflip" then
+    if string.lower(text) == "!c" then
         net.Start("start")
         net.Send(ply)
     end
@@ -22,8 +22,9 @@ function ExchangeInit()
                 DarkRP.notify(ply, 1, 4, string.format("Das kannst du dir nicht leisten."))
             else
                 ply:addMoney(-InputEndNumberInit)
-                --net.Start("BackToken")
-               -- net.WriteUInt(InputEndNumberInit,8)
+                net.Start("BackToken")
+                net.WriteUInt(InputEndNumberInit, 8)
+                net.Send(ply)
             end
         end
     end)
