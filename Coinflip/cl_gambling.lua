@@ -1,4 +1,3 @@
-print("Joooooooooooooooooooooooooooooooooooooooooooooooooo")
 
 function MainUI()
     net.Receive("start", function(len, ply)
