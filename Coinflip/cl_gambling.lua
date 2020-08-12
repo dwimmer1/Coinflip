@@ -108,7 +108,7 @@ function MainUI()
             function ExchangeTab()
                 local NummerInputBox = vgui.Create("DTextEntry", List2)
                 NummerInputBox:SetPos(220, 45)
-                NummerInputBox:SetSize(80, 26)
+                NummerInputBox:SetSize(110, 26)
                 NummerInputBox:SetNumeric(true)
                 NummerInputBox:SetValue("Only Numbers")
 
@@ -133,7 +133,12 @@ function MainUI()
                     net.SendToServer()
                 end
             end
+            net.Receive("BackToken", function ()
+            local TokenBoughtCl = net.ReadUInt(8)
 
+
+
+            end)
             ExchangeTab()
         end
 
