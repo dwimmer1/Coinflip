@@ -14,6 +14,12 @@ function MainUI()
 
         local MainSheet = vgui.Create("DPropertySheet", frame)
         MainSheet:Dock(FILL)
+
+        MainSheet.Paint = function(s, w, h)
+            surface.SetDrawColor(105, 105, 105, 230)
+            surface.DrawRect(12, 0, 0, w, h)
+        end
+
         local List1 = vgui.Create("DPanelList")
         List1:SetSize(475, 355)
         List1:SetPos(5, 15)
@@ -128,16 +134,14 @@ function MainUI()
                 UmwandelButton:SetMouseInputEnabled(true)
 
                 UmwandelButton.DoClick = function()
-                    --  chat.AddText(InputEndNumber .. "")
                     net.Start("Exchange")
-                    net.WriteBool(false)
+                    net.WriteBool(true)
                     net.SendToServer()
                 end
             end
 
             net.Receive("BackToken", function()
                 local TokenBoughtCl = net.ReadUInt(8)
-                print(TokensNew .. "")
                 TokensNew = TokensNew + TokenBoughtCl
                 TokenInfo1:SetText("Deine Tokens: " .. TokensNew)
                 TokenInfo:SetText("Deine Tokens: " .. TokensNew)
