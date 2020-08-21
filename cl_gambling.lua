@@ -1,3 +1,9 @@
+surface.CreateFont("MainFont", {
+    font = "Comic Sans MS",
+    size = 30,
+    weight = 300,
+})
+
 function MainUI()
     net.Receive("start", function(len, ply)
         frame = vgui.Create("DFrame")
@@ -55,7 +61,7 @@ function MainUI()
             Einsatz:SetSize(150, 57)
             Einsatz:SetTextColor(Color(0, 0, 0))
             local ImageButton = vgui.Create("DImageButton", List1)
-            ImageButton:SetMaterial("vgui/kopf.png")
+            ImageButton:SetMaterial("img/kopf.png")
             ImageButton:SizeToContents()
             ImageButton:SetMouseInputEnabled(false)
             ImageButton:CenterHorizontal(0.5)
@@ -66,8 +72,8 @@ function MainUI()
             AuswahlBox:SetValue("Auswahl")
             AuswahlBox:AddChoice("Kopf")
             AuswahlBox:AddChoice("Zahl")
-            local IKopf = "vgui/kopf.png"
-            local IZahl = "vgui/zahl.png"
+            local IKopf = "img/kopf.png"
+            local IZahl = "img/zahl.png"
 
             AuswahlBox.OnSelect = function(self, index, value)
                 if value == "Kopf" then
@@ -110,28 +116,66 @@ function MainUI()
                 end
             end
 
-            local TokensNew = TokensCurr --Tokens die durch den BackToken gekommen sind 
+            local TokensNew = TokensCurr --Tokens die durch den BackToken net. gekommen sind 
 
             function ExchangeTab()
-                local NummerInputBox = vgui.Create("DTextEntry", List2)
-                NummerInputBox:SetPos(220, 45)
-                NummerInputBox:SetSize(110, 26)
-                NummerInputBox:SetNumeric(true)
-                NummerInputBox:SetValue("Only Numbers")
+                local NumberInputBox = vgui.Create("DTextEntry", List2)
+                NumberInputBox:SetPos(240, 85)
+                NumberInputBox:SetSize(110, 26)
+                NumberInputBox:SetNumeric(true)
+                NumberInputBox:SetValue("Max. 25")
 
-                -- while NummerInputBox:IsEditing() == true do
-                NummerInputBox.OnValueChange = function(self)
-                    local InputEndNumber = NummerInputBox:GetInt() -- InputEndNumber = Nummer die in die Box eingegeben wurde (Enter)
+                -- while NumberInputBox:IsEditing() == true do
+                NumberInputBox.OnValueChange = function()
+                    local InputEndNumber = NumberInputBox:GetInt() -- InputEndNumber = Nummer die in die Box eingegeben wurde (Enter)
                     net.Start("Exchange")
                     net.WriteUInt(InputEndNumber, 8)
                     net.SendToServer()
                 end
 
+                local NumberInputBoxTokens = vgui.Create("DTextEntry", List2) --2 Für Token to Cash
+                NumberInputBoxTokens:SetPos(240, 170)
+                NumberInputBoxTokens:SetSize(110, 26)
+                NumberInputBoxTokens:SetNumeric(true)
+                NumberInputBoxTokens:SetValue("Min. 10")
+
+                NumberInputBoxTokens.OnValueChange = function()
+                    local InputEndTokensNumber = NumberInputBoxTokens:GetInt()
+
+                    if InputEndTokensNumber >= 10 then
+                        TokensNew = TokensNew - InputEndTokensNumber
+                        net.Start("ExchangeToCash")
+                        net.WriteUInt(InputEndTokensNumber, 8)
+                        net.SendToServer()
+                        TokenInfo1:SetText("Deine Tokens: " .. TokensNew)
+                        TokenInfo:SetText("Deine Tokens: " .. TokensNew)
+                    end
+                end
+
+                local InfoKurs = vgui.Create("DLabel", List2)
+                InfoKurs:SetText("Kurs: 1€ = 10 Tokens")
+                InfoKurs:SetPos(10, 10)
+                InfoKurs:SetSize(300, 29)
+                InfoKurs:SetTextColor(Color(255, 250, 250))
+                InfoKurs:SetFont("MainFont")
+                local InfoCashToToken = vgui.Create("DLabel", List2)
+                InfoCashToToken:SetText("Cash to Tokens:")
+                InfoCashToToken:SetPos(50, -5)
+                InfoCashToToken:SetSize(3000, 200)
+                InfoCashToToken:SetTextColor(Color(0, 0, 0))
+                InfoCashToToken:SetFont("MainFont")
+                local InfoTokensToCash = vgui.Create("DLabel", List2) -- N
+                InfoTokensToCash:SetText("Tokens to Cash:")
+                InfoTokensToCash:SetPos(50, 80)
+                InfoTokensToCash:SetSize(3000, 200)
+                InfoTokensToCash:SetTextColor(Color(0, 0, 0))
+                InfoTokensToCash:SetFont("MainFont")
                 local UmwandelButton = vgui.Create("DButton", List2)
                 UmwandelButton:SetPos(150, 110)
                 UmwandelButton:SetSize(220, 43)
                 UmwandelButton:SetText("Umwandeln")
                 UmwandelButton:SetMouseInputEnabled(true)
+                UmwandelButton:Hide()
 
                 UmwandelButton.DoClick = function()
                     net.Start("Exchange")
