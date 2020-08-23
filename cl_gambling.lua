@@ -32,9 +32,13 @@ function MainUI()
         local List2 = vgui.Create("DPanelList")
         List2:SetSize(475, 355)
         List2:SetPos(5, 15)
+        local List3 = vgui.Create("DPanelList")
+        List3:SetSize(475, 355)
+        List3:SetPos(5, 15)
         MainSheet:AddSheet("Coinflip", List1, "icon16/coins.png", false, false, "Flip it")
-        MainSheet:AddSheet("Exchange", List2, "icon16/money.png", false, false, "Exchange")
-        local PanelCash = vgui.Create("DPanel", List2)
+        MainSheet:AddSheet("GuessIT", List2, "icon16/coins.png", false, false, "Moin")
+        MainSheet:AddSheet("Exchange", List3, "icon16/money.png", false, false, "Exchange")
+        local PanelCash = vgui.Create("DPanel", List3)
         PanelCash:SetSize(108, 23)
         PanelCash:SetPos(470, 5)
         local PanelCash1 = vgui.Create("DPanel", List1)
@@ -47,7 +51,7 @@ function MainUI()
             TokenInfo:SetPos(473, -11)
             TokenInfo:SetSize(150, 57)
             TokenInfo:SetTextColor(Color(0, 0, 0))
-            TokenInfo:SetParent(List2)
+            TokenInfo:SetParent(List3)
             TokenInfo:SetText("Deine Tokens: " .. TokensCurr) --
             local TokenInfo1 = vgui.Create("DLabel", PanelCash1) --Coinflip Tab
             TokenInfo1:SetPos(473, -11)
@@ -118,80 +122,87 @@ function MainUI()
 
             local TokensNew = TokensCurr --Tokens die durch den BackToken net. gekommen sind 
 
-            function ExchangeTab()
-                local NumberInputBox = vgui.Create("DTextEntry", List2)
-                NumberInputBox:SetPos(240, 85)
-                NumberInputBox:SetSize(110, 26)
-                NumberInputBox:SetNumeric(true)
-                NumberInputBox:SetValue("Max. 25")
+            function GuessTab()
+                function ExchangeTab()
+                    local NumberInputBox = vgui.Create("DTextEntry", List3)
+                    NumberInputBox:SetPos(240, 85)
+                    NumberInputBox:SetSize(110, 26)
+                    NumberInputBox:SetNumeric(true)
+                    NumberInputBox:SetValue("Max. 25")
 
-                -- while NumberInputBox:IsEditing() == true do
-                NumberInputBox.OnValueChange = function()
-                    local InputEndNumber = NumberInputBox:GetInt() -- InputEndNumber = Nummer die in die Box eingegeben wurde (Enter)
-                    net.Start("Exchange")
-                    net.WriteUInt(InputEndNumber, 8)
-                    net.SendToServer()
-                end
-
-                local NumberInputBoxTokens = vgui.Create("DTextEntry", List2) --2 Für Token to Cash
-                NumberInputBoxTokens:SetPos(240, 170)
-                NumberInputBoxTokens:SetSize(110, 26)
-                NumberInputBoxTokens:SetNumeric(true)
-                NumberInputBoxTokens:SetValue("Min. 10")
-
-                NumberInputBoxTokens.OnValueChange = function()
-                    local InputEndTokensNumber = NumberInputBoxTokens:GetInt()
-
-                    if InputEndTokensNumber >= 10 then
-                        TokensNew = TokensNew - InputEndTokensNumber
-                        net.Start("ExchangeToCash")
-                        net.WriteUInt(InputEndTokensNumber, 8)
+                    -- while NumberInputBox:IsEditing() == true do
+                    NumberInputBox.OnValueChange = function()
+                        local InputEndNumber = NumberInputBox:GetInt() -- InputEndNumber = Nummer die in die Box eingegeben wurde (Enter)
+                        net.Start("Exchange")
+                        net.WriteUInt(InputEndNumber, 8)
                         net.SendToServer()
-                        TokenInfo1:SetText("Deine Tokens: " .. TokensNew)
-                        TokenInfo:SetText("Deine Tokens: " .. TokensNew)
                     end
+
+                    local NumberInputBoxTokens = vgui.Create("DTextEntry", List3) --2 Für Token to Cash
+                    NumberInputBoxTokens:SetPos(240, 170)
+                    NumberInputBoxTokens:SetSize(110, 26)
+                    NumberInputBoxTokens:SetNumeric(true)
+                    NumberInputBoxTokens:SetValue("Min. 10")
+
+                    NumberInputBoxTokens.OnValueChange = function()
+                        local InputEndTokensNumber = NumberInputBoxTokens:GetInt()
+
+                        if InputEndTokensNumber >= 10 then
+                            TokensNew = TokensNew - InputEndTokensNumber
+                            net.Start("ExchangeToCash")
+                            net.WriteUInt(InputEndTokensNumber, 8)
+                            net.SendToServer()
+                            TokenInfo1:SetText("Deine Tokens: " .. TokensNew)
+                            TokenInfo:SetText("Deine Tokens: " .. TokensNew)
+                        end
+                    end
+
+                    local InfoKurs = vgui.Create("DLabel", List3)
+                    InfoKurs:SetText("Kurs: 1€ = 10 Tokens")
+                    InfoKurs:SetPos(10, 10)
+                    InfoKurs:SetSize(300, 29)
+                    InfoKurs:SetTextColor(Color(255, 250, 250))
+                    InfoKurs:SetFont("MainFont")
+                    local InfoCashToToken = vgui.Create("DLabel", List3)
+                    InfoCashToToken:SetText("Cash to Tokens:")
+                    InfoCashToToken:SetPos(50, -5)
+                    InfoCashToToken:SetSize(3000, 200)
+                    InfoCashToToken:SetTextColor(Color(0, 0, 0))
+                    InfoCashToToken:SetFont("MainFont")
+                    local InfoTokensToCash = vgui.Create("DLabel", List3) -- N
+                    InfoTokensToCash:SetText("Tokens to Cash:")
+                    InfoTokensToCash:SetPos(50, 80)
+                    InfoTokensToCash:SetSize(3000, 200)
+                    InfoTokensToCash:SetTextColor(Color(0, 0, 0))
+                    InfoTokensToCash:SetFont("MainFont")
+                    local TestButton = vgui.Create("DButton", List2)
+                    TestButton:SetPos(1, 1)
+                    TestButton:SetSize(60, 13)
+                    TestButton:SetText("test")
+                    TestButton:SetMouseInputEnabled(true)
+
+                    /*
+
+
+                    TestButton.DoClick = function()
+                        net.Start("Exchange")
+                        net.WriteBool(true)
+                        net.SendToServer()
+                    end
+                    */
                 end
 
-                local InfoKurs = vgui.Create("DLabel", List2)
-                InfoKurs:SetText("Kurs: 1€ = 10 Tokens")
-                InfoKurs:SetPos(10, 10)
-                InfoKurs:SetSize(300, 29)
-                InfoKurs:SetTextColor(Color(255, 250, 250))
-                InfoKurs:SetFont("MainFont")
-                local InfoCashToToken = vgui.Create("DLabel", List2)
-                InfoCashToToken:SetText("Cash to Tokens:")
-                InfoCashToToken:SetPos(50, -5)
-                InfoCashToToken:SetSize(3000, 200)
-                InfoCashToToken:SetTextColor(Color(0, 0, 0))
-                InfoCashToToken:SetFont("MainFont")
-                local InfoTokensToCash = vgui.Create("DLabel", List2) -- N
-                InfoTokensToCash:SetText("Tokens to Cash:")
-                InfoTokensToCash:SetPos(50, 80)
-                InfoTokensToCash:SetSize(3000, 200)
-                InfoTokensToCash:SetTextColor(Color(0, 0, 0))
-                InfoTokensToCash:SetFont("MainFont")
-                local UmwandelButton = vgui.Create("DButton", List2)
-                UmwandelButton:SetPos(150, 110)
-                UmwandelButton:SetSize(220, 43)
-                UmwandelButton:SetText("Umwandeln")
-                UmwandelButton:SetMouseInputEnabled(true)
-                UmwandelButton:Hide()
+                ExchangeTab()
 
-                UmwandelButton.DoClick = function()
-                    net.Start("Exchange")
-                    net.WriteBool(true)
-                    net.SendToServer()
-                end
+                net.Receive("BackToken", function()
+                    local TokenBoughtCl = net.ReadUInt(8)
+                    TokensNew = TokensNew + TokenBoughtCl
+                    TokenInfo1:SetText("Deine Tokens: " .. TokensNew)
+                    TokenInfo:SetText("Deine Tokens: " .. TokensNew)
+                end)
             end
 
-            net.Receive("BackToken", function()
-                local TokenBoughtCl = net.ReadUInt(8)
-                TokensNew = TokensNew + TokenBoughtCl
-                TokenInfo1:SetText("Deine Tokens: " .. TokensNew)
-                TokenInfo:SetText("Deine Tokens: " .. TokensNew)
-            end)
-
-            ExchangeTab()
+            GuessTab()
         end
 
         CoinflipTab()
