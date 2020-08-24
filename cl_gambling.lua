@@ -1,5 +1,5 @@
 surface.CreateFont("MainFont", {
-    font = "Comic Sans MS",
+    font = "Arial",
     size = 30,
     weight = 300,
 })
@@ -36,7 +36,7 @@ function MainUI()
         List3:SetSize(475, 355)
         List3:SetPos(5, 15)
         MainSheet:AddSheet("Coinflip", List1, "icon16/coins.png", false, false, "Flip it")
-        MainSheet:AddSheet("GuessIT", List2, "icon16/coins.png", false, false, "Moin")
+        MainSheet:AddSheet("Crash", List2, "icon16/coins.png", false, false, "Moin")
         MainSheet:AddSheet("Exchange", List3, "icon16/money.png", false, false, "Exchange")
         local PanelCash = vgui.Create("DPanel", List3)
         PanelCash:SetSize(108, 23)
@@ -123,6 +123,7 @@ function MainUI()
             local TokensNew = TokensCurr --Tokens die durch den BackToken net. gekommen sind 
 
             function GuessTab()
+            --Crash???
                 function ExchangeTab()
                     local NumberInputBox = vgui.Create("DTextEntry", List3)
                     NumberInputBox:SetPos(240, 85)
