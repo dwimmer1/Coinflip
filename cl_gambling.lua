@@ -131,33 +131,38 @@ function MainUI()
                     NumberInputBox:SetNumeric(true)
                     NumberInputBox:SetValue("Max. 25")
 
-                    -- while NumberInputBox:IsEditing() == true do
-                    NumberInputBox.OnValueChange = function()
-                        local InputEndNumber = NumberInputBox:GetInt() -- InputEndNumber = Nummer die in die Box eingegeben wurde (Enter)
-                        net.Start("Exchange")
-                        net.WriteUInt(InputEndNumber, 8)
+                -- while NumberInputBox:IsEditing() == true do
+                NumberInputBox.OnValueChange = function()
+                    local InputEndNumber = NumberInputBox:GetInt() -- InputEndNumber = Nummer die in die Box eingegeben wurde (Enter)
+                    if InputEndNumber <= 25 then
+                    net.Start("Exchange")
+                    net.WriteUInt(InputEndNumber, 8)
+                    net.SendToServer()
+                    else
+                    chat.AddText(Color(139,0,0),"Ungültige Eingabe")
+                    end
+                end
+
+                local NumberInputBoxTokens = vgui.Create("DTextEntry", List3) --2 Für Token to Cash
+                NumberInputBoxTokens:SetPos(240, 170)
+                NumberInputBoxTokens:SetSize(110, 26)
+                NumberInputBoxTokens:SetNumeric(true)
+                NumberInputBoxTokens:SetValue("Min. 10")
+
+                NumberInputBoxTokens.OnValueChange = function()
+                    local InputEndTokensNumber = NumberInputBoxTokens:GetInt()
+
+                    if InputEndTokensNumber >= 10 then
+                        TokensNew = TokensNew - InputEndTokensNumber
+                        net.Start("ExchangeToCash")
+                        net.WriteUInt(InputEndTokensNumber, 8)
                         net.SendToServer()
+                        TokenInfo1:SetText("Deine Tokens: " .. TokensNew)
+                        TokenInfo:SetText("Deine Tokens: " .. TokensNew)
+                        else
+                        chat.AddText(Color(139,0,0),"Ungültige Eingabe")
                     end
-
-                    local NumberInputBoxTokens = vgui.Create("DTextEntry", List3) --2 Für Token to Cash
-                    NumberInputBoxTokens:SetPos(240, 170)
-                    NumberInputBoxTokens:SetSize(110, 26)
-                    NumberInputBoxTokens:SetNumeric(true)
-                    NumberInputBoxTokens:SetValue("Min. 10")
-
-                    NumberInputBoxTokens.OnValueChange = function()
-                        local InputEndTokensNumber = NumberInputBoxTokens:GetInt()
-
-                        if InputEndTokensNumber >= 10 then
-                            TokensNew = TokensNew - InputEndTokensNumber
-                            net.Start("ExchangeToCash")
-                            net.WriteUInt(InputEndTokensNumber, 8)
-                            net.SendToServer()
-                            TokenInfo1:SetText("Deine Tokens: " .. TokensNew)
-                            TokenInfo:SetText("Deine Tokens: " .. TokensNew)
-                        end
-                    end
-
+                end
                     local InfoKurs = vgui.Create("DLabel", List3)
                     InfoKurs:SetText("Kurs: 1€ = 10 Tokens")
                     InfoKurs:SetPos(10, 10)
