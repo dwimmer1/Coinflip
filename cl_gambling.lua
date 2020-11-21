@@ -163,39 +163,25 @@ function MainUI()
                         chat.AddText(Color(139,0,0),"Ungültige Eingabe")
                     end
                 end
-                    local InfoKurs = vgui.Create("DLabel", List3)
-                    InfoKurs:SetText("Kurs: 1€ = 10 Tokens")
-                    InfoKurs:SetPos(10, 10)
-                    InfoKurs:SetSize(300, 29)
-                    InfoKurs:SetTextColor(Color(255, 250, 250))
-                    InfoKurs:SetFont("MainFont")
-                    local InfoCashToToken = vgui.Create("DLabel", List3)
-                    InfoCashToToken:SetText("Cash to Tokens:")
-                    InfoCashToToken:SetPos(50, -5)
-                    InfoCashToToken:SetSize(3000, 200)
-                    InfoCashToToken:SetTextColor(Color(0, 0, 0))
-                    InfoCashToToken:SetFont("MainFont")
-                    local InfoTokensToCash = vgui.Create("DLabel", List3) -- N
-                    InfoTokensToCash:SetText("Tokens to Cash:")
-                    InfoTokensToCash:SetPos(50, 80)
-                    InfoTokensToCash:SetSize(3000, 200)
-                    InfoTokensToCash:SetTextColor(Color(0, 0, 0))
-                    InfoTokensToCash:SetFont("MainFont")
-                    local TestButton = vgui.Create("DButton", List2)
-                    TestButton:SetPos(1, 1)
-                    TestButton:SetSize(60, 13)
-                    TestButton:SetText("test")
-                    TestButton:SetMouseInputEnabled(true)
+                local InfoKurs = vgui.Create("DLabel", List3)
+                InfoKurs:SetText("Kurs: 1€ = 10 Tokens")
+                InfoKurs:SetPos(10, 10)
+                InfoKurs:SetSize(300, 29)
+                InfoKurs:SetTextColor(Color(255, 250, 250))
+                InfoKurs:SetFont("MainFont")
+                local InfoCashToToken = vgui.Create("DLabel", List3)
+                InfoCashToToken:SetText("Cash to Tokens:")
+                InfoCashToToken:SetPos(27, -5)
+                InfoCashToToken:SetSize(3000, 200)
+                InfoCashToToken:SetTextColor(Color(0, 0, 0))
+                InfoCashToToken:SetFont("MainFont")
+                local InfoTokensToCash = vgui.Create("DLabel", List3) -- N
+                InfoTokensToCash:SetText("Tokens to Cash:")
+                InfoTokensToCash:SetPos(27, 80)
+                InfoTokensToCash:SetSize(3000, 200)
+                InfoTokensToCash:SetTextColor(Color(0, 0, 0))
+                InfoTokensToCash:SetFont("MainFont")
 
-                    /*
-
-
-                    TestButton.DoClick = function()
-                        net.Start("Exchange")
-                        net.WriteBool(true)
-                        net.SendToServer()
-                    end
-                    */
                 end
 
                 ExchangeTab()
